@@ -7,34 +7,61 @@ const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
 
 const Average = ({ allClicks, all }) => {
   if (all > 0) {
-    return <>average {allClicks}</>;
+    return (
+      <tr>
+        <td>average</td>
+        <td>{allClicks}</td>
+      </tr>
+    );
   } else {
-    return <>average</>;
+    return (
+      <tr>
+        <td>average</td>
+      </tr>
+    );
   }
 };
 
 const Positive = ({ posClicks, all }) => {
   if (all > 0) {
-    return <>positive {posClicks}</>;
+    return (
+      <tr>
+        <td>positive</td>
+        <td>{posClicks}</td>
+      </tr>
+    );
   } else {
-    return <>positive</>;
+    return (
+      <tr>
+        <td>positive</td>
+      </tr>
+    );
   }
 };
+
+const Statistic = (props) => {
+  return (
+    <tr>
+      <td>{props.text}</td>
+      <td>{props.value}</td>
+    </tr>
+  );
+};
+
 const Statistics = (props) => {
   if (props.all > 0)
     return (
       <div>
-        good {props.good}
-        <br />
-        neutral {props.neutral}
-        <br />
-        bad {props.bad}
-        <br />
-        all {props.all}
-        <br />
-        <Average allClicks={props.allClicks} all={props.all} />
-        <br />
-        <Positive posClicks={props.posClicks} all={props.all} />
+        <table>
+          <tbody>
+            <Statistic text="good" value={props.good} />
+            <Statistic text="neutral" value={props.neutral} />
+            <Statistic text="bad" value={props.bad} />
+            <Statistic text="all" value={props.all} />
+            <Average allClicks={props.allClicks} all={props.all} />
+            <Positive posClicks={props.posClicks} all={props.all} />
+          </tbody>
+        </table>
       </div>
     );
   return <div>No feedback given</div>;
@@ -77,7 +104,6 @@ const App = () => {
         allClicks={(good - bad) / all}
         posClicks={(good / all) * 100}
       />
-      <br />
     </div>
   );
 };
