@@ -5,6 +5,22 @@ const Headings = (props) => <h1>{props.value}</h1>;
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>;
 
+const Average = ({ allClicks, all }) => {
+  if (all > 0) {
+    return <>average {allClicks}</>;
+  } else {
+    return <>average</>;
+  }
+};
+
+const Positive = ({ posClicks, all }) => {
+  if (all > 0) {
+    return <>positive {posClicks}</>;
+  } else {
+    return <>positive</>;
+  }
+};
+
 const App = () => {
   // save clicks of each button to own state
   const [good, setGood] = useState(0);
@@ -12,6 +28,8 @@ const App = () => {
   const [bad, setBad] = useState(0);
 
   const headings = ["give feedback", "statistics"];
+
+  const all = good + neutral + bad;
 
   const handleGoodClick = () => {
     setGood(good + 1);
@@ -33,9 +51,13 @@ const App = () => {
       <Button onClick={handleBadClick} text="bad" />
       <Headings value={headings[1]} />
       good {good} <br />
-      neutral {neutral} <br></br>
+      neutral {neutral} <br />
       bad {bad}
-      <br></br>
+      <br />
+      all {all}
+      <br />
+      <Average allClicks={(good - bad) / all} all={all} /> <br />
+      <Positive all={all} posClicks={(good / all) * 100} />
     </div>
   );
 };
