@@ -7,10 +7,23 @@ const Button = (props) => {
 
 const App = (props) => {
   const [selected, setSelected] = useState(0);
+  const [voted, setVoted] = useState(0);
+  const [max, maxVotes] = useState(0);
+
+  const mxFunc = () => {
+    const a = points.map((e, i) => {
+      if (e > max) {
+        maxVotes(e);
+        setVoted(i);
+      }
+      return e;
+    });
+  };
 
   const randClick = () => {
     const randomnumber = Math.floor(Math.random() * (anecdotes.length - 0)) + 0;
     setSelected(randomnumber);
+    mxFunc();
   };
   const n = props.anecdotes.length;
 
@@ -20,15 +33,19 @@ const App = (props) => {
     const copy = [...points];
     copy[selected] += 1;
     setPoint(copy);
+    mxFunc();
   };
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <h2>{props.anecdotes[selected]}</h2>
       <h2>has {points[selected]} votes</h2>
       <br />
       <Button onClick={randClick} text="next anecdote" />
       <Button onClick={upVote} text="vote" />
+      <h1> Anecdote with most votes </h1>
+      <h2>{props.anecdotes[voted]}</h2>
     </div>
   );
 };
