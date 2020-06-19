@@ -6,14 +6,8 @@ const Header = ({ course }) => {
 };
 
 const Total = ({ course }) => {
-  let sum2 = 0;
-  const sum3 = course.parts.map((e, i) => {
-    console.log(e.exercises);
-    sum2 = sum2 + e.exercises;
-    return e;
-  });
-
-  return <p>Number of exercises {sum2}</p>;
+  const total = course.parts.reduce((s, p) => s + p.exercises, 0);
+  return <p>Number of exercises {total}</p>;
 };
 
 const Part = (props) => {
