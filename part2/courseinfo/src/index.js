@@ -6,11 +6,14 @@ const Header = ({ course }) => {
 };
 
 const Total = ({ course }) => {
-  const sum =
-    course.parts[0].exercises +
-    course.parts[1].exercises +
-    course.parts[2].exercises;
-  return <p>Number of exercises {sum}</p>;
+  let sum2 = 0;
+  const sum3 = course.parts.map((e, i) => {
+    console.log(e.exercises);
+    sum2 = sum2 + e.exercises;
+    return e;
+  });
+
+  return <p>Number of exercises {sum2}</p>;
 };
 
 const Part = (props) => {
@@ -22,7 +25,6 @@ const Part = (props) => {
 };
 
 const Content = ({ course }) => {
-  console.log(course.parts);
   return (
     <div>
       {course.parts.map((part) => (
@@ -38,6 +40,7 @@ const Course = (props) => {
     <div>
       <Header course={props.course} />
       <Content course={props.course} />
+      <Total course={props.course} />
     </div>
   );
 };
