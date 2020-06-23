@@ -52,6 +52,15 @@ const App = ({ people }) => {
     }
   };
 
+  const delPer = (id, name) => {
+    const person = persons.find((n) => n.id === id);
+    //console.log(person);
+    if (window.confirm(`Delete ${name}?`)) {
+      setPersons(persons.filter((e) => e.id !== id));
+      personService.del(id);
+    }
+  };
+
   var func = (function mySearch() {
     var stringToGoIntoTheRegex = srch;
     var regex = new RegExp(stringToGoIntoTheRegex, "i");
@@ -75,7 +84,8 @@ const App = ({ people }) => {
         handleNumChange={handleNumChange}
         addName={addName}
       />
-      <h3> Numbers </h3> <Persons persToShow={persToShow} />{" "}
+      <h3> Numbers </h3>
+      <Persons persToShow={persToShow} delPer={delPer} />{" "}
     </div>
   );
 };
