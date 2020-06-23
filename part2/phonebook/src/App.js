@@ -34,7 +34,7 @@ const App = ({ people }) => {
   const addName = (e) => {
     e.preventDefault();
     const names = persons.map((e) => e.name);
-    //console.log(names.indexOf(newName));
+    //console.log(persons);
     if (names.indexOf(newName) < 0) {
       const persObject = {
         name: newName,
@@ -46,7 +46,24 @@ const App = ({ people }) => {
         setNewNum("");
       });
     } else {
-      alert(`${newName} is already added to phonebook`);
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`
+        )
+      ) {
+        const pers = persons.find((e) => e.name === newName);
+        const changedPerson = { ...pers, number: newNum };
+        personService
+          .update(pers.id, changedPerson)
+          .then((returnedPers) => {
+            setPersons(
+              persons.map((p) => (p.id !== pers.id ? p : returnedPers))
+            );
+          })
+          .catch((error) => {
+            console.log("error");
+          });
+      }
       setNewNum("");
       setNewName("");
     }
