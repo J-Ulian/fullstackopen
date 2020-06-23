@@ -5,12 +5,14 @@ import personService from "./services/persons";
 import PersonForm from "./components/PersonForm";
 import Filter from "./components/Filter";
 import Persons from "./components/Persons";
+import Notification from "./components/Notification";
 
 const App = ({ people }) => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNum, setNewNum] = useState("");
   const [srch, setSrch] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
   let persToShow = [...persons];
 
   useEffect(() => {
@@ -42,6 +44,10 @@ const App = ({ people }) => {
       };
       personService.create(persObject).then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
+        setErrorMessage(`Added  ${newName}`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
         setNewName("");
         setNewNum("");
       });
@@ -52,7 +58,10 @@ const App = ({ people }) => {
         )
       ) {
         const pers = persons.find((e) => e.name === newName);
-        const changedPerson = { ...pers, number: newNum };
+        const changedPerson = {
+          ...pers,
+          number: newNum,
+        };
         personService
           .update(pers.id, changedPerson)
           .then((returnedPers) => {
@@ -63,6 +72,10 @@ const App = ({ people }) => {
           .catch((error) => {
             console.log("error");
           });
+        setErrorMessage(`Number of ${newName} is changed to ${newNum}`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
       }
       setNewNum("");
       setNewName("");
@@ -88,12 +101,13 @@ const App = ({ people }) => {
 
   return (
     <div>
-      <h2> Phonebook </h2>{" "}
+      <h2> Phonebook </h2>
+      <Notification message={errorMessage} />
       <div>
-        filter shown with{" "}
-        <Filter value={srch} onChange={handleSrch} persons={persons} />{" "}
-      </div>{" "}
-      <h3> Add a new </h3>{" "}
+        filter shown with
+        <Filter value={srch} onChange={handleSrch} persons={persons} />
+      </div>
+      <h3> Add a new </h3>
       <PersonForm
         newName={newName}
         newNum={newNum}
@@ -101,8 +115,7 @@ const App = ({ people }) => {
         handleNumChange={handleNumChange}
         addName={addName}
       />
-      <h3> Numbers </h3>
-      <Persons persToShow={persToShow} delPer={delPer} />{" "}
+      <h3> Numbers </h3> <Persons persToShow={persToShow} delPer={delPer} />
     </div>
   );
 };
