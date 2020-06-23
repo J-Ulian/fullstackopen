@@ -70,7 +70,13 @@ const App = ({ people }) => {
             );
           })
           .catch((error) => {
-            console.log("error");
+            setErrorMessage(
+              `Information of ${pers.name} has already been removed from server`
+            );
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000);
+            setPersons(persons.filter((p) => p.id !== pers.id));
           });
         setErrorMessage(`Number of ${newName} is changed to ${newNum}`);
         setTimeout(() => {
