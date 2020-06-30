@@ -115,6 +115,32 @@ test('a blog can be deleted', async () => {
     expect(contents).not.toContain(blogToDelete.title)
 })
 
+test('unique identifier property of the blog posts is named id', async () => {
+    const blogs = await helper.blogsInDb()
+    const contents = blogs.map(r => r.id)
+    expect(contents).toBeDefined()
+})
+
+test('if the likes property is missing from the request, it will default to the value 0', async () => {
+    const newBlog = {
+        title: "Preact patterns",
+        author: "Michael Chan",
+        url: "https://reactpatterns.com/",
+        __v: 0
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+    const blogAtEnd = await helper.blogsInDb()
+    const contents = blogAtEnd.filter(r => r.title === 'Preact patterns')
+    expect(contents[0].likes).toEqual(0)
+
+})
+
 
 afterAll(() => {
     mongoose.connection.close()
