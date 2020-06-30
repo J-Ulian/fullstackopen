@@ -68,7 +68,7 @@ test('a valid blog can be added', async () => {
 
 })
 
-test('blog without content is not added', async () => {
+test('blog without title and url is not added', async () => {
     const newBlog = {
         likes: 1000000
     }
