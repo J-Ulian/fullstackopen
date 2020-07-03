@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Blog from './components/Blog';
 import blogService from './services/blogs';
 import loginService from './services/login';
+import Notification from './components/Notification';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -11,6 +12,7 @@ const App = () => {
   const [url, setUrl] = useState('');
   const [author, setAuthor] = useState('');
   const [user, setUser] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const addBlog = (event) => {
     event.preventDefault();
@@ -21,6 +23,10 @@ const App = () => {
     };
     blogService.create(blogObject).then((returnedBlog) => {
       setBlogs(blogs.concat(returnedBlog));
+      setErrorMessage(`a new blog ${title} ${author} added`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
       setTitle('');
       setUrl('');
       setAuthor('');
@@ -105,9 +111,11 @@ const App = () => {
       setUsername('');
       setPassword('');
     } catch (exception) {
-      console.error(exception);
+      setErrorMessage('wrong credentials');
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 5000);
     }
-    console.log('logging in with', username, password);
   };
 
   const handleLogout = () => {
@@ -118,6 +126,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={errorMessage} />
 
       {user === null ? (
         loginForm()
