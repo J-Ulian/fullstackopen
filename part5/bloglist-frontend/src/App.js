@@ -3,6 +3,7 @@ import Blog from './components/Blog';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import Notification from './components/Notification';
+import BlogForm from './components/BlogForm';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,6 +14,7 @@ const App = () => {
   const [author, setAuthor] = useState('');
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [addBlogVisible, setAddBlogVisible] = useState(false);
 
   const addBlog = (event) => {
     event.preventDefault();
@@ -78,28 +80,12 @@ const App = () => {
     </div>
   );
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-  };
   const handleAuthorChange = (event) => {
     setAuthor(event.target.value);
   };
   const handleUrlChange = (event) => {
     setUrl(event.target.value);
   };
-
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <input onChange={handleTitleChange} value={title} placeholder="Title" />
-      <input
-        onChange={handleAuthorChange}
-        value={author}
-        placeholder="Author"
-      />
-      <input onChange={handleUrlChange} value={url} placeholder="URL" />
-      <button type="submit">save</button>
-    </form>
-  );
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -123,6 +109,30 @@ const App = () => {
     window.localStorage.clear();
   };
 
+  const blogForm = () => {
+    const hideWhenVisible = { display: addBlogVisible ? 'none' : '' };
+    const showWhenVisible = { display: addBlogVisible ? '' : 'none' };
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={setAddBlogVisible}>show add blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <BlogForm
+            addBlog={addBlog}
+            handleTitleChange={({ target }) => setTitle(target.value)}
+            title={title}
+            handleAuthorChange={handleAuthorChange}
+            author={author}
+            handleUrlChange={handleUrlChange}
+            url={url}
+          />
+          <button onClick={() => setAddBlogVisible(false)}>cancel</button>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div>
       <h2>blogs</h2>
@@ -137,7 +147,6 @@ const App = () => {
           {blogs.map((blog) => (
             <Blog key={blog.id} blog={blog} />
           ))}
-          <h2>create new</h2>
           {blogForm()}
         </div>
       )}
