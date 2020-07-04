@@ -44,6 +44,25 @@ const App = () => {
     });
   };
 
+  const moreLikes = (id) => {
+    const blog = blogs.find((n) => n.id === id);
+    const changedBlog = { ...blog, likes: blog.likes + 1 };
+
+    blogService
+      .update(id, changedBlog)
+      .then((returnedBlog) => {
+        setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
+      })
+      .catch((error) => {
+        setErrorMessage(
+          `Blog '${blog.content}' was already removed from server`
+        );
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
+      });
+  };
+
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' };
     const showWhenVisible = { display: loginVisible ? '' : 'none' };
@@ -130,7 +149,11 @@ const App = () => {
             <div>
               {blog.title}
               <Togglable buttonLabel="view">
-                <Blog key={blog.id} blog={blog} />
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  moreLikes={() => moreLikes(blog.id)}
+                />
               </Togglable>
             </div>
           ))}
