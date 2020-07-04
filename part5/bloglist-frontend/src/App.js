@@ -127,7 +127,12 @@ const App = () => {
           {logoutForm()}
           <br />
           {blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
+            <div>
+              {blog.title}
+              <Togglable buttonLabel="view">
+                <Blog key={blog.id} blog={blog} />
+              </Togglable>
+            </div>
           ))}
           {blogForm()}
         </div>
