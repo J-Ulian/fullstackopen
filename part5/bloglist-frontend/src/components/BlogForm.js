@@ -5,8 +5,6 @@ const BlogForm = ({ createBlog }) => {
   const [url, setUrl] = useState('');
   const [author, setAuthor] = useState('');
 
-  const [blogs, setBlogs] = useState([]);
-
   const handleAuthorChange = (event) => {
     setAuthor(event.target.value);
   };
@@ -31,7 +29,6 @@ const BlogForm = ({ createBlog }) => {
   return (
     <div>
       <h2> create new </h2>
-
       <form onSubmit={addBlog}>
         <input onChange={handleTitleChange} value={title} placeholder="Title" />
         <input
@@ -40,8 +37,8 @@ const BlogForm = ({ createBlog }) => {
           placeholder="Author"
         />
         <input onChange={handleUrlChange} value={url} placeholder="URL" />
-        <button type="submit"> save </button>
-      </form>
+        <button type="submit"> save </button>{' '}
+      </form>{' '}
     </div>
   );
 };
