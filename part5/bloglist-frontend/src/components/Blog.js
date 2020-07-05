@@ -8,11 +8,11 @@ const Blog = ({ blog, moreLikes }) => {
     marginBottom: 5,
   };
   return (
-    <div style={blogStyle}>
+    <div className="blog" style={blogStyle}>
       {blog.author}
       <br />
-      {blog.likes}
-      <button onClick={moreLikes}>like</button>
+      <div>{blog.likes}</div>
+      <button onClick={moreLikes}>like this post</button>
       <br />
       {blog.url}
     </div>
