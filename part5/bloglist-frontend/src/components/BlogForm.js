@@ -28,22 +28,29 @@ const BlogForm = ({ createBlog }) => {
   };
   return (
     <div className="formDiv">
-      <h2> create new </h2>
+      <h2> create new </h2>{' '}
       <form onSubmit={addBlog}>
         <input
+          id="title"
           className="title"
           onChange={handleTitleChange}
           value={title}
           placeholder="Title"
         />
         <input
+          id="author"
           onChange={handleAuthorChange}
           value={author}
           placeholder="Author"
         />
-        <input onChange={handleUrlChange} value={url} placeholder="URL" />
-        <button type="submit"> save </button>
-      </form>
+        <input
+          onChange={handleUrlChange}
+          value={url}
+          id="url"
+          placeholder="URL"
+        />
+        <button type="submit"> save </button>{' '}
+      </form>{' '}
     </div>
   );
 };
