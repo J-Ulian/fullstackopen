@@ -24,10 +24,7 @@ describe('Blog app', function () {
 
   describe('when logged in', function () {
     beforeEach(function () {
-      cy.contains('login').click();
-      cy.get('#username').type('j-j');
-      cy.get('#password').type('reallystrongpassword');
-      cy.get('#login-button').click();
+      cy.login({ username: 'j-j', password: 'reallystrongpassword' });
     });
 
     it('a new blog can be created', function () {
@@ -41,11 +38,11 @@ describe('Blog app', function () {
 
     describe('and a note exists', function () {
       beforeEach(function () {
-        cy.contains('new blog').click();
-        cy.get('#title').type('a blog created by cypress');
-        cy.get('#author').type('cypress');
-        cy.get('#url').type('localcypress');
-        cy.contains('save').click();
+        cy.createBlog({
+          title: 'a blog created by cypress',
+          author: 'cypress',
+          url: 'localcypress',
+        });
       });
 
       it('you can like it', function () {
@@ -54,5 +51,17 @@ describe('Blog app', function () {
         cy.contains('1');
       });
     });
+  });
+  it('login fails with wrong password', function () {
+    cy.contains('login').click();
+    cy.get('#username').type('mluukkai');
+    cy.get('#password').type('wrong');
+    cy.get('#login-button').click();
+
+    cy.get('.error').contains('wrong credentials');
+    cy.get('.error')
+      .should('have.css', 'color', 'rgb(255, 0, 0)')
+      .and('have.css', 'border-style', 'solid');
+    cy.get('html').should('not.contain', 'Matti Luukkainen logged in');
   });
 });
