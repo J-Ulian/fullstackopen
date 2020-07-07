@@ -43,11 +43,21 @@ describe('Blog app', function () {
           author: 'cypress',
           url: 'localcypress',
         });
+        cy.createBlog({
+          title: 'a second blog created by cypress',
+          author: 'cypress',
+          url: 'localcypress',
+        });
+        cy.createBlog({
+          title: 'a third blog created by cypress',
+          author: 'cypress',
+          url: 'localcypress',
+        });
       });
 
-      it('you can like it', function () {
-        cy.contains('view').click();
-        cy.contains('like this post').click();
+      it.only('you can like it', function () {
+        cy.contains('second').contains('view').click();
+        cy.contains('second').contains('like this post').click();
         cy.contains('1');
       });
     });
