@@ -11,7 +11,7 @@ const Blog = ({ blog, moreLikes, del }) => {
     <div className="blog" style={blogStyle}>
       {' '}
       {blog.author} <br />
-      <div> {blog.likes} </div>{' '}
+      <span> {blog.likes} </span>{' '}
       <button onClick={moreLikes}> like this post </button>{' '}
       <button onClick={del}> delete this post </button> <br /> {blog.url}{' '}
     </div>

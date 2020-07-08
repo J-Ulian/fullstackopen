@@ -19,7 +19,7 @@ describe('Blog app', function () {
     cy.get('#username').type('j-j');
     cy.get('#password').type('reallystrongpassword');
     cy.get('#login-button').click();
-    cy.contains('admin logged in');
+    cy.contains('logged in');
   });
 
   describe('when logged in', function () {
@@ -63,10 +63,20 @@ describe('Blog app', function () {
         cy.contains('second').contains('like this post').click();
         cy.contains('1');
       });
-      it.only('you can delete a blog', function () {
+      it('you can delete a blog', function () {
         cy.contains('second').contains('view').click();
         cy.contains('second').contains('delete this post').click();
         cy.get('html').should('not.contain', 'second');
+      })
+      it('then example', function () {
+        cy.contains('a blog created by cypress').contains('view').click();
+        cy.contains('a second blog created by cypress').contains('view').click();
+        cy.contains('third').contains('view').click();
+        cy.contains('second').contains('like this post').click();
+        cy.get('span').then(spans => {
+          console.log('number of spans', spans.length)
+          console.log('span0', spans[0])
+        })
       })
     });
   });

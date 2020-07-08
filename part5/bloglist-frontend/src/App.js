@@ -25,7 +25,7 @@ const App = () => {
         })
       )
     );
-  }, []);
+  }, [blogs.map((blog) => blog.likes)]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
