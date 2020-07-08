@@ -27,10 +27,27 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
+const del = (id, newObject) => {
+  //console.log(token)
+  const config = {
+    headers: {
+      Authorization: token
+    }
+  }
+  return axios.delete(`${baseUrl}/${id}`, {
+    headers: {
+      Authorization: token,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    }
+  })
+
+};
 
 export default {
   getAll,
   create,
   setToken,
-  update
+  update,
+  del
 }

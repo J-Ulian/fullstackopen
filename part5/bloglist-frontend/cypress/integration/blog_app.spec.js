@@ -24,7 +24,10 @@ describe('Blog app', function () {
 
   describe('when logged in', function () {
     beforeEach(function () {
-      cy.login({ username: 'j-j', password: 'reallystrongpassword' });
+      cy.login({
+        username: 'j-j',
+        password: 'reallystrongpassword'
+      });
     });
 
     it('a new blog can be created', function () {
@@ -55,11 +58,16 @@ describe('Blog app', function () {
         });
       });
 
-      it.only('you can like it', function () {
+      it('you can like it', function () {
         cy.contains('second').contains('view').click();
         cy.contains('second').contains('like this post').click();
         cy.contains('1');
       });
+      it.only('you can delete a blog', function () {
+        cy.contains('second').contains('view').click();
+        cy.contains('second').contains('delete this post').click();
+        cy.get('html').should('not.contain', 'second');
+      })
     });
   });
   it('login fails with wrong password', function () {

@@ -1,5 +1,5 @@
 import React from 'react';
-const Blog = ({ blog, moreLikes }) => {
+const Blog = ({ blog, moreLikes, del }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -9,12 +9,11 @@ const Blog = ({ blog, moreLikes }) => {
   };
   return (
     <div className="blog" style={blogStyle}>
-      {blog.author}
-      <br />
-      <div>{blog.likes}</div>
-      <button onClick={moreLikes}>like this post</button>
-      <br />
-      {blog.url}
+      {' '}
+      {blog.author} <br />
+      <div> {blog.likes} </div>{' '}
+      <button onClick={moreLikes}> like this post </button>{' '}
+      <button onClick={del}> delete this post </button> <br /> {blog.url}{' '}
     </div>
   );
 };

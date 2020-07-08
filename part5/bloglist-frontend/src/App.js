@@ -49,6 +49,13 @@ const App = () => {
     });
   };
 
+  const del = (id) => {
+    const blog = blogs.find((n) => n.id === id);
+    console.log(blog);
+    blogService.del(id, blog);
+    setBlogs(blogs.filter((e) => e.id !== id));
+  };
+
   const moreLikes = (id) => {
     const blog = blogs.find((n) => n.id === id);
     const changedBlog = {
@@ -76,7 +83,8 @@ const App = () => {
     <div>
       <p>
         {' '}
-        {user.name} logged in <button onClick={handleLogout}> logout </button>{' '}
+        {user.name}
+        logged in <button onClick={handleLogout}> logout </button>{' '}
       </p>{' '}
     </div>
   );
@@ -118,7 +126,7 @@ const App = () => {
 
   return (
     <div>
-      <h2> blogs </h2> <Notification message={errorMessage} />
+      <h2> blogs </h2> <Notification message={errorMessage} />{' '}
       {user === null ? (
         <Togglable buttonLabel="login">
           <LoginForm
@@ -142,6 +150,7 @@ const App = () => {
                   key={blog.id}
                   blog={blog}
                   moreLikes={() => moreLikes(blog.id)}
+                  del={() => del(blog.id)}
                 />{' '}
               </Togglable>{' '}
               <br />
