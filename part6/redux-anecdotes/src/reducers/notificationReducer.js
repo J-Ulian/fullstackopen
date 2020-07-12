@@ -1,7 +1,7 @@
 const notificationReducer = (state = '', action) => {
   switch (action.type) {
     case 'SET_NOTIFICATION':
-      return action.filter;
+      return action.notification;
     default:
       return state;
   }

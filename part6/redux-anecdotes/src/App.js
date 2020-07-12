@@ -9,9 +9,7 @@ const App = () => {
     <div>
       <Notification />
       <AnecdoteList />
-
       <VisibilityFilter />
-
       <AnecdoteForm />
     </div>
   );
