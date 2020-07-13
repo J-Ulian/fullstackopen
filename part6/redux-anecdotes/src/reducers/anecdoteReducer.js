@@ -30,12 +30,15 @@ export const createAnecdote = (content) => {
   };
 };
 
-export const voteFor = (id) => {
-  return {
-    type: 'VOTE',
-    data: {
-      id,
-    },
+export const voteFor = (content, id, votes) => {
+  return async (dispatch) => {
+    const changedAnecdote = await anecdoteService.plusVote(content, id, votes);
+    dispatch({
+      type: 'VOTE',
+      data: {
+        id,
+      },
+    });
   };
 };
 
