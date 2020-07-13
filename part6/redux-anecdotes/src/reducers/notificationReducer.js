@@ -13,5 +13,29 @@ export const notificationChange = (notification) => {
     notification,
   };
 };
+export const setNotification = (notification, time) => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification,
+    })
+    setTimeout(() => dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: ''
+    }), time * 1000);
+  }
+}
+
+// export const voteFor = (content, id, votes) => {
+//   return async (dispatch) => {
+//     const changedAnecdote = await anecdoteService.plusVote(content, id, votes);
+//     dispatch({
+//       type: 'VOTE',
+//       data: {
+//         id,
+//       },
+//     });
+//   };
+// };
 
 export default notificationReducer;
