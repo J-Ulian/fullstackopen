@@ -12,8 +12,7 @@ const AnecdoteForm = (props) => {
     const content = event.target.anecdote.value;
     const notification = `you added "${event.target.anecdote.value}"`;
     event.target.anecdote.value = '';
-    const newAnecdote = await anecdoteService.createNew(content);
-    dispatch(createAnecdote(newAnecdote));
+    dispatch(createAnecdote(content));
     dispatch(notificationChange(notification));
     setTimeout(() => dispatch(notificationChange('')), 5000);
   };
