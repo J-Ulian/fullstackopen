@@ -18,14 +18,10 @@ const asObject = (anecdote) => {
   };
 };
 
-export const createAnecdote = (content) => {
+export const createAnecdote = (data) => {
   return {
     type: 'NEW_ANECDOTE',
-    data: {
-      content,
-      id: getId(),
-      votes: 0,
-    },
+    data,
   };
 };
 
@@ -33,7 +29,7 @@ export const voteFor = (id) => {
   return {
     type: 'VOTE',
     data: {
-      id
+      id,
     },
   };
 };
@@ -56,7 +52,7 @@ const reducer = (state = [], action) => {
     case 'NEW_ANECDOTE':
       return [...state, action.data];
     case 'INIT_ANECDOTES':
-      return action.data
+      return action.data;
   }
 
   return state;
@@ -65,8 +61,8 @@ const reducer = (state = [], action) => {
 export const initializeAnecdotes = (anecdotes) => {
   return {
     type: 'INIT_ANECDOTES',
-    data: anecdotes
-  }
-}
+    data: anecdotes,
+  };
+};
 
 export default reducer;
