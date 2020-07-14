@@ -39,6 +39,7 @@ export const voteFor = (id, content, votes) => {
         id,
       },
     });
+
   };
 };
 

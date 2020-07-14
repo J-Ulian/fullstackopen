@@ -4,6 +4,7 @@ import { createAnecdote } from '../reducers/anecdoteReducer';
 import { notificationChange } from '../reducers/notificationReducer';
 import { setNotification } from '../reducers/notificationReducer';
 import anecdoteService from '../services/anecdotes';
+import { connect } from 'react-redux';
 
 const AnecdoteForm = (props) => {
   const dispatch = useDispatch();
@@ -12,8 +13,8 @@ const AnecdoteForm = (props) => {
     event.preventDefault();
     const content = event.target.anecdote.value;
     event.target.anecdote.value = '';
-    dispatch(createAnecdote(content));
-    dispatch(setNotification(`you added "${content}"`, 10));
+    props.createAnecdote(content);
+    dispatch(setNotification(`you added "${content}"`, 5));
   };
 
   return (
@@ -29,4 +30,6 @@ const AnecdoteForm = (props) => {
   );
 };
 
-export default AnecdoteForm;
+export default connect(null, {
+  createAnecdote,
+})(AnecdoteForm);
