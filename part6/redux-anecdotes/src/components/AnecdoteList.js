@@ -37,10 +37,10 @@ const AnecdoteList = (props) => {
             has {anecdote.votes}
             <button
               onClick={
-                (() =>
-                  props.voteFor(anecdote.id, anecdote.content, anecdote.votes),
                 () =>
-                  props.setNotification(`you voted '${anecdote.content}'`, 5))
+                  props.voteFor(anecdote.id, anecdote.content, anecdote.votes)
+                // ,() =>
+                //   props.setNotification(`you voted '${anecdote.content}'`, 5)
               }
             >
               vote

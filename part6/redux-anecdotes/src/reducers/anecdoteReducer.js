@@ -1,6 +1,9 @@
 import anecdoteService from '../services/anecdotes';
 
 /* eslint-disable default-case */
+
+var myVar;
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -27,6 +30,26 @@ export const createAnecdote = (content) => {
       type: 'NEW_ANECDOTE',
       data: newAnecdote,
     });
+
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: `you added: ${content}`,
+    });
+
+    (function myStopFunction() {
+      clearTimeout(myVar);
+    })();
+
+    (function myFunction() {
+      myVar = setTimeout(
+        () =>
+          dispatch({
+            type: 'SET_NOTIFICATION',
+            notification: '',
+          }),
+        5 * 1000
+      );
+    })();
   };
 };
 
@@ -39,7 +62,54 @@ export const voteFor = (id, content, votes) => {
         id,
       },
     });
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification: `you voted for: ${content}`,
+    });
 
+    (function myStopFunction() {
+      clearTimeout(myVar);
+    })();
+
+    (function myFunction() {
+      myVar = setTimeout(
+        () =>
+          dispatch({
+            type: 'SET_NOTIFICATION',
+            notification: '',
+          }),
+        5 * 1000
+      );
+    })();
+  };
+};
+
+export const setNotification = (notification, time) => {
+  return async (dispatch) => {
+    dispatch({
+      type: 'SET_NOTIFICATION',
+      notification,
+    });
+
+    (function myStopFunction() {
+      clearTimeout(myVar);
+    })();
+
+    (function myFunction() {
+      myVar = setTimeout(
+        () =>
+          dispatch({
+            type: 'SET_NOTIFICATION',
+            notification: '',
+          }),
+        time * 1000
+      );
+    })();
+
+    // setTimeout(() => dispatch({
+    //   type: 'SET_NOTIFICATION',
+    //   notification: ''
+    // }), time * 1000);
   };
 };
 

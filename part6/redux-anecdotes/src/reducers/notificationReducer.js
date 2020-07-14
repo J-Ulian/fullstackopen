@@ -18,13 +18,31 @@ export const setNotification = (notification, time) => {
     dispatch({
       type: 'SET_NOTIFICATION',
       notification,
-    })
-    setTimeout(() => dispatch({
-      type: 'SET_NOTIFICATION',
-      notification: ''
-    }), time * 1000);
-  }
-}
+    });
+
+    var myVar;
+
+    (function myStopFunction() {
+      clearTimeout(myVar);
+    })();
+
+    (function myFunction() {
+      myVar = setTimeout(
+        () =>
+          dispatch({
+            type: 'SET_NOTIFICATION',
+            notification: '',
+          }),
+        time * 1000
+      );
+    })();
+
+    // setTimeout(() => dispatch({
+    //   type: 'SET_NOTIFICATION',
+    //   notification: ''
+    // }), time * 1000);
+  };
+};
 
 // export const voteFor = (content, id, votes) => {
 //   return async (dispatch) => {
