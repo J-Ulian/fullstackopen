@@ -22,7 +22,7 @@ const AnecdoteList = (props) => {
   const dispatch = useDispatch();
 
   const voting = (id, content, votes) => {
-    dispatch(voteFor(content, id, votes));
+    dispatch(voteFor(id, content, votes));
     dispatch(setNotification(`you voted '${content}'`, 10));
   };
 
@@ -36,8 +36,11 @@ const AnecdoteList = (props) => {
           <div>
             has {anecdote.votes}
             <button
-              onClick={() =>
-                voting(anecdote.id, anecdote.content, anecdote.votes)
+              onClick={
+                (() =>
+                  props.voteFor(anecdote.id, anecdote.content, anecdote.votes),
+                () =>
+                  props.setNotification(`you voted '${anecdote.content}'`, 10))
               }
             >
               vote
@@ -64,5 +67,13 @@ const mapStateToProps = (state) => {
   }
 };
 
-const ConnectedAnecdoteList = connect(mapStateToProps)(AnecdoteList);
+const mapDispatchToProps = {
+  voteFor,
+  setNotification,
+};
+
+const ConnectedAnecdoteList = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AnecdoteList);
 export default ConnectedAnecdoteList;

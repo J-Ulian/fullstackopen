@@ -16,7 +16,7 @@ const createNew = async (content) => {
     return response.data;
 }
 
-const plusVote = async (content, id, votes) => {
+const plusVote = async (id, content, votes) => {
     const object = {
         content,
         votes: votes + 1
