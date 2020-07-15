@@ -5,6 +5,8 @@ import {
   Route,
   Link,
   useParams,
+  Redirect,
+  useHistory,
 } from 'react-router-dom';
 
 const padding = {
@@ -58,6 +60,31 @@ const AnecdoteList = ({ anecdotes }) => (
   </div>
 );
 
+const Login = (props) => {
+  const history = useHistory();
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    props.onLogin('admin');
+    history.push('/');
+  };
+
+  return (
+    <div>
+      <h2>login</h2>
+      <form onSubmit={onSubmit}>
+        <div>
+          username: <input />
+        </div>
+        <div>
+          password: <input type="password" />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </div>
+  );
+};
+
 const About = () => (
   <div>
     <h2>About anecdote app</h2>
@@ -98,6 +125,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('');
   const [author, setAuthor] = useState('');
   const [info, setInfo] = useState('');
+  const history = useHistory();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -107,6 +135,9 @@ const CreateNew = (props) => {
       info,
       votes: 0,
     });
+    history.push('/');
+    props.setNotification(`you added: ${content}`);
+    setTimeout(() => props.setNotification(''), 10000);
   };
 
   return (
@@ -161,6 +192,12 @@ const App = () => {
     },
   ]);
 
+  const [user, setUser] = useState(null);
+
+  const login = (user) => {
+    setUser(user);
+  };
+
   const [notification, setNotification] = useState('');
 
   const addNew = (anecdote) => {
@@ -193,6 +230,7 @@ const App = () => {
 
     <Router>
       <h1>Software anecdotes</h1>
+      {notification ? <em>{notification}</em> : <></>}
       <div>
         <Link style={padding} to="/">
           anecdotes
@@ -203,6 +241,13 @@ const App = () => {
         <Link style={padding} to="/about">
           about
         </Link>
+        {user ? (
+          <em>{user} logged in</em>
+        ) : (
+          <Link style={padding} to="/login">
+            login
+          </Link>
+        )}
       </div>
       <Switch>
         <Route path="/anecdotes/:id">
@@ -212,7 +257,11 @@ const App = () => {
           <About />
         </Route>
         <Route path="/create">
-          <CreateNew addNew={addNew} />
+          <CreateNew
+            addNew={addNew}
+            notification={notification}
+            setNotification={setNotification}
+          />
         </Route>
         <Route path="/">
           <AnecdoteList anecdotes={anecdotes} />
