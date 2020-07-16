@@ -8,6 +8,7 @@ import {
   Redirect,
   useHistory,
 } from 'react-router-dom';
+import { useField } from './hooks/index';
 
 const padding = {
   padding: 5,
@@ -122,53 +123,52 @@ const Footer = () => (
 );
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
-  const [info, setInfo] = useState('');
+  const content = useField('text');
+  const author = useField('text');
+  const info = useField('text');
   const history = useHistory();
 
+  const handleReset = () => {
+    content.clear();
+    author.clear();
+    info.clear();
+  };
+
   const handleSubmit = (e) => {
+    const con = content.value;
+    const auth = author.value;
+    const inf = info.value;
+    console.log(con);
     e.preventDefault();
     props.addNew({
-      content,
-      author,
-      info,
+      con,
+      auth,
+      inf,
       votes: 0,
     });
     history.push('/');
-    props.setNotification(`you added: ${content}`);
+    props.setNotification(`you added: ${con}`);
     setTimeout(() => props.setNotification(''), 10000);
   };
 
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form onReset={handleReset} onSubmit={handleSubmit}>
         <div>
           content
-          <input
-            name="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+          <input {...content} />
         </div>
         <div>
           author
-          <input
-            name="author"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input
-            name="info"
-            value={info}
-            onChange={(e) => setInfo(e.target.value)}
-          />
+          <input {...info} />
         </div>
         <button>create</button>
+        <input type="reset" value="Reset" />
       </form>
     </div>
   );
@@ -241,13 +241,13 @@ const App = () => {
         <Link style={padding} to="/about">
           about
         </Link>
-        {user ? (
+        {/* {user ? (
           <em>{user} logged in</em>
         ) : (
           <Link style={padding} to="/login">
             login
           </Link>
-        )}
+        )} */}
       </div>
       <Switch>
         <Route path="/anecdotes/:id">
