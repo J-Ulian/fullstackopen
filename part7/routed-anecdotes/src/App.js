@@ -129,25 +129,21 @@ const CreateNew = (props) => {
   const history = useHistory();
 
   const handleReset = () => {
-    content.clear();
-    author.clear();
-    info.clear();
+    content.onChange();
+    author.onChange();
+    info.onChange();
   };
 
   const handleSubmit = (e) => {
-    const con = content.value;
-    const auth = author.value;
-    const inf = info.value;
-    console.log(con);
     e.preventDefault();
     props.addNew({
-      con,
-      auth,
-      inf,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0,
     });
     history.push('/');
-    props.setNotification(`you added: ${con}`);
+    props.setNotification(`you added: ${content.value}`);
     setTimeout(() => props.setNotification(''), 10000);
   };
 
