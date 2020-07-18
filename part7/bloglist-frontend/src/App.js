@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Blog from './components/Blog';
+import BlogMUI from './components/BlogMUI';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import NewBlog from './components/NewBlog';
@@ -7,7 +8,30 @@ import NewBlog from './components/NewBlog';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import storage from './utils/storage';
-import { Table, Form, Button } from 'react-bootstrap';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useRouteMatch,
+  useHistory,
+} from 'react-router-dom';
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  TextField,
+  Button,
+  Toolbar,
+  AppBar,
+} from '@material-ui/core';
+
+import { Alert } from '@material-ui/lab';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -15,8 +39,13 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [notification, setNotification] = useState(null);
+  const [message, setMessage] = useState(null);
 
   const blogFormRef = React.createRef();
+
+  const padding = {
+    padding: 5,
+  };
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -48,7 +77,11 @@ const App = () => {
       setUsername('');
       setPassword('');
       setUser(user);
-      notifyWith(`${user.name} welcome back!`);
+      //notifyWith(`${user.name} welcome back!`);
+      setMessage(`${user.name} welcome back!`);
+      setTimeout(() => {
+        setMessage(null);
+      }, 10000);
       storage.saveUser(user);
     } catch (exception) {
       notifyWith('wrong username/password', 'error');
@@ -99,64 +132,94 @@ const App = () => {
 
   if (!user) {
     return (
-      <div className="container">
+      <Container>
         <h2>login to application</h2>
 
         <Notification notification={notification} />
 
-        <Form onSubmit={handleLogin}>
-          <Form.Group>
-            <Form.Label>username:</Form.Label>
-            <Form.Control
-              type="text"
-              name="username"
+        <form onSubmit={handleLogin}>
+          <div>
+            <TextField
+              label="username"
               id="username"
               value={username}
               onChange={({ target }) => setUsername(target.value)}
             />
-
-            <Form.Label>password:</Form.Label>
-            <Form.Control
-              id="password"
+          </div>
+          <div>
+            <TextField
+              label="password"
               type="password"
+              id="password"
               value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
-            <Button variant="primary" id="login" type="submit">
-              login
-            </Button>
-          </Form.Group>
-        </Form>
-      </div>
+          </div>
+          <Button variant="contained" color="primary" type="submit" id="login">
+            login
+          </Button>
+        </form>
+      </Container>
     );
   }
 
   const byLikes = (b1, b2) => b2.likes - b1.likes;
 
   return (
-    <div className="container">
-      <h2>blogs</h2>
+    <>
+      {/*}
+      <div className="container">
+        <h2>blogs</h2>
 
-      <Notification notification={notification} />
+        <Notification notification={notification} />
 
-      <p>
-        {user.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
+        <p>
+          {user.name} logged in <button onClick={handleLogout}>logout</button>
+        </p>
 
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <NewBlog createBlog={createBlog} />
-      </Togglable>
+        <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+          <NewBlog createBlog={createBlog} />
+        </Togglable>
 
-      {blogs.sort(byLikes).map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLike={handleLike}
-          handleRemove={handleRemove}
-          own={user.username === blog.user.username}
-        />
-      ))}
-    </div>
+        {blogs.sort(byLikes).map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleLike={handleLike}
+            handleRemove={handleRemove}
+            own={user.username === blog.user.username}
+          />
+        ))}
+      </div>
+        {*/}
+      <Container>
+        <div>
+          <h2>blogs</h2>
+
+          <Notification notification={notification} />
+
+          {message && <Alert severity="success">{message}</Alert>}
+
+          <p>
+            {user.name} logged in <button onClick={handleLogout}>logout</button>
+          </p>
+
+          <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+            <NewBlog createBlog={createBlog} />
+          </Togglable>
+
+          {blogs.sort(byLikes).map((blog) => (
+            <BlogMUI
+              key={blog.id}
+              blog={blog}
+              handleLike={handleLike}
+              handleRemove={handleRemove}
+              own={user.username === blog.user.username}
+            />
+          ))}
+        </div>
+      </Container>
+    </>
   );
 };
 
