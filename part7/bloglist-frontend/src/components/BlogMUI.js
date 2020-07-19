@@ -48,7 +48,9 @@ const Blog = ({ blog, handleLike, handleRemove, own }) => {
 
               {visible && (
                 <>
-                  <TableCell>{blog.url}</TableCell>
+                  <TableCell>
+                    <a href={blog.url}>Link</a>{' '}
+                  </TableCell>
 
                   <TableCell>{blog.likes} likes </TableCell>
                   <TableCell>
@@ -57,8 +59,7 @@ const Blog = ({ blog, handleLike, handleRemove, own }) => {
                       variant="contained"
                       onClick={() => handleLike(blog.id)}
                     >
-                      {' '}
-                      like{' '}
+                      like
                     </Button>
                   </TableCell>
 

@@ -29,6 +29,7 @@ import {
   Button,
   Toolbar,
   AppBar,
+  IconButton,
 } from '@material-ui/core';
 
 import { Alert } from '@material-ui/lab';
@@ -165,34 +166,20 @@ const App = () => {
 
   const byLikes = (b1, b2) => b2.likes - b1.likes;
 
+  const link = () => {};
+
   return (
     <>
-      {/*}
-      <div className="container">
-        <h2>blogs</h2>
-
-        <Notification notification={notification} />
-
-        <p>
-          {user.name} logged in <button onClick={handleLogout}>logout</button>
-        </p>
-
-        <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-          <NewBlog createBlog={createBlog} />
-        </Togglable>
-
-        {blogs.sort(byLikes).map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleLike={handleLike}
-            handleRemove={handleRemove}
-            own={user.username === blog.user.username}
-          />
-        ))}
-      </div>
-        {*/}
       <Container>
+        <AppBar position="static">
+          <Toolbar>
+            <Button color="inherit">home</Button>
+            <Button color="inherit">blogs</Button>
+            <Button color="inherit">users</Button>
+
+            <Button color="inherit">login</Button>
+          </Toolbar>
+        </AppBar>
         <div>
           <h2>blogs</h2>
 

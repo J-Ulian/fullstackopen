@@ -6,19 +6,6 @@ import { setNotification } from '../reducers/notificationReducer';
 import { connect } from 'react-redux';
 
 const AnecdoteList = (props) => {
-  // const anecdotes = useSelector(({ anecdotes, filter }) => {
-  //   if (filter === '') {
-  //     return anecdotes;
-  //   } else {
-  //     let result;
-  //     const func = (function mySearch() {
-  //       const stringToGoIntoTheRegex = filter;
-  //       const regex = new RegExp(stringToGoIntoTheRegex, 'i');
-  //       result = anecdotes.filter((per) => per.content.match(regex));
-  //     })();
-  //     return result;
-  //   }
-  // });
   const dispatch = useDispatch();
 
   const voting = (id, content, votes) => {
@@ -26,7 +13,16 @@ const AnecdoteList = (props) => {
     dispatch(setNotification(`you voted '${content}'`, 10));
   };
 
+  //rex exp filter
   const byVotes = (b1, b2) => b2.votes - b1.votes;
+
+  //filter filter
+  let filter = props.filter.toLowerCase();
+  let anecdotes2 = props.anecdotes.filter((a) =>
+    a.content.toLowerCase().includes(filter)
+  );
+  console.log(anecdotes2);
+
   return (
     <div>
       <h2> Anecdotes </h2>
