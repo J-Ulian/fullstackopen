@@ -4,7 +4,7 @@ import BlogMUI from './components/BlogMUI';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import NewBlog from './components/NewBlog';
-
+import styled from 'styled-components';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import storage from './utils/storage';
@@ -164,6 +164,16 @@ const App = () => {
     );
   }
 
+  const Page = styled.div`
+    padding: 1em;
+    background: papayawhip;
+  `;
+
+  const Footer = styled.div`
+    padding: 1em;
+    margin-top: 1em;
+  `;
+
   const byLikes = (b1, b2) => b2.likes - b1.likes;
 
   const link = () => {};
@@ -171,40 +181,47 @@ const App = () => {
   return (
     <>
       <Container>
-        <AppBar position="static">
-          <Toolbar>
-            <Button color="inherit">home</Button>
-            <Button color="inherit">blogs</Button>
-            <Button color="inherit">users</Button>
+        <Page>
+          <AppBar position="static">
+            <Toolbar>
+              <Button color="inherit">home</Button>
+              <Button color="inherit">blogs</Button>
+              <Button color="inherit">users</Button>
 
-            <Button color="inherit">login</Button>
-          </Toolbar>
-        </AppBar>
-        <div>
-          <h2>blogs</h2>
+              <Button color="inherit">login</Button>
+            </Toolbar>
+          </AppBar>
+          <div>
+            <h2>blogs</h2>
 
-          <Notification notification={notification} />
+            <Notification notification={notification} />
 
-          {message && <Alert severity="success">{message}</Alert>}
+            {message && <Alert severity="success">{message}</Alert>}
 
-          <p>
-            {user.name} logged in <button onClick={handleLogout}>logout</button>
-          </p>
+            <p>
+              {user.name} logged in{' '}
+              <button onClick={handleLogout}>logout</button>
+            </p>
 
-          <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-            <NewBlog createBlog={createBlog} />
-          </Togglable>
+            <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+              <NewBlog createBlog={createBlog} />
+            </Togglable>
+            <br />
 
-          {blogs.sort(byLikes).map((blog) => (
-            <BlogMUI
-              key={blog.id}
-              blog={blog}
-              handleLike={handleLike}
-              handleRemove={handleRemove}
-              own={user.username === blog.user.username}
-            />
-          ))}
-        </div>
+            {blogs.sort(byLikes).map((blog) => (
+              <BlogMUI
+                key={blog.id}
+                blog={blog}
+                handleLike={handleLike}
+                handleRemove={handleRemove}
+                own={user.username === blog.user.username}
+              />
+            ))}
+          </div>
+          <Footer>
+            <em>Note app, Department of Computer Science 2020</em>
+          </Footer>
+        </Page>
       </Container>
     </>
   );
