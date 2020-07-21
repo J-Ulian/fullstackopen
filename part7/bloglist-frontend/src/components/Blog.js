@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Table, Button } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { likeIt } from '../reducers/blogReducer';
 
 const Blog = ({ blog, handleLike, handleRemove, own }) => {
   const [visible, setVisible] = useState(false);
@@ -13,6 +15,10 @@ const Blog = ({ blog, handleLike, handleRemove, own }) => {
     marginBottom: 5,
   };
 
+  const dispatch = useDispatch();
+  const blogs = useSelector(({ blogs }) => blogs);
+  console.log(blogs);
+
   const label = visible ? 'hide' : 'view';
 
   return (
@@ -21,43 +27,46 @@ const Blog = ({ blog, handleLike, handleRemove, own }) => {
         <tbody>
           <tr key={blog.id}>
             <td>
-              <i> {blog.title} </i>
-            </td>
-            <td>by {blog.author} </td>
+              <i> {blog.title} </i>{' '}
+            </td>{' '}
+            <td> by {blog.author} </td>{' '}
             <td>
               <Button variant="info" onClick={() => setVisible(!visible)}>
-                {label}
-              </Button>
-            </td>
-
+                {' '}
+                {label}{' '}
+              </Button>{' '}
+            </td>{' '}
             {visible && (
               <>
-                <td>{blog.url}</td>
-
-                <td>{blog.likes} likes </td>
+                <td> {blog.url} </td>{' '}
+                <td>
+                  {' '}
+                  {blog.likes}
+                  likes{' '}
+                </td>{' '}
                 <td>
                   <Button variant="success" onClick={() => handleLike(blog.id)}>
                     {' '}
                     like{' '}
-                  </Button>
-                </td>
-
-                <td>added by {blog.user.name}</td>
+                  </Button>{' '}
+                </td>{' '}
+                <td> added by {blog.user.name} </td>{' '}
                 <td>
+                  {' '}
                   {own && (
                     <Button
                       variant="danger"
                       onClick={() => handleRemove(blog.id)}
                     >
-                      remove
+                      remove{' '}
                     </Button>
-                  )}
-                </td>
+                  )}{' '}
+                </td>{' '}
               </>
-            )}
-          </tr>
-        </tbody>
-      </Table>
+            )}{' '}
+          </tr>{' '}
+        </tbody>{' '}
+      </Table>{' '}
     </div>
   );
 };

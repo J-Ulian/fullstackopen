@@ -13,8 +13,11 @@ import {
   Toolbar,
   AppBar,
 } from '@material-ui/core';
+import ReactMarkdown from 'react-markdown';
+import { useDispatch, useSelector } from 'react-redux';
+import { likeIt, removeIt } from '../reducers/blogReducer';
 
-const Blog = ({ blog, handleLike, handleRemove, own }) => {
+const Blog = ({ handleLike, handleRemove }) => {
   const [visible, setVisible] = useState(false);
 
   const blogStyle = {
@@ -27,73 +30,77 @@ const Blog = ({ blog, handleLike, handleRemove, own }) => {
 
   const label = visible ? 'hide' : 'view';
 
+  const dispatch = useDispatch();
+  const blogs = useSelector(({ blogs }) => {
+    console.log(blogs);
+    return blogs;
+  });
+  console.log(blogs);
+  const byLikes = (b1, b2) => b2.likes - b1.likes;
+  const own = true;
+
   return (
     <div /*style={blogStyle}*/ className="blog">
       <TableContainer component={Paper}>
         <Table>
           <TableBody>
-            <TableRow key={blog.id}>
-              <TableCell>
-                <i> {blog.title} </i>
-              </TableCell>
-              <TableCell>by {blog.author} </TableCell>
-              <TableCell>
-                <Button
-                  variant="contained"
-                  onClick={() => setVisible(!visible)}
-                >
-                  {label}
-                </Button>
-              </TableCell>
-
-              {visible && (
-                <>
-                  <TableCell>
-                    <a href={blog.url}>Link</a>{' '}
-                  </TableCell>
-
-                  <TableCell>{blog.likes} likes </TableCell>
-                  <TableCell>
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      onClick={() => handleLike(blog.id)}
+            {blogs.sort(byLikes).map((blog) => (
+              <TableRow key={blog.id}>
+                <TableCell>
+                  <i> {blog.title} </i>
+                </TableCell>
+                <TableCell> by {blog.author} </TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    key={blog.id}
+                    onClick={() => setVisible(!visible)}
+                  >
+                    {label}
+                  </Button>
+                </TableCell>
+                {visible && (
+                  <>
+                    <div
+                      style={{
+                        wordBreak: 'break-all',
+                      }}
                     >
-                      like
-                    </Button>
-                  </TableCell>
-
-                  <TableCell>added by {blog.user.name}</TableCell>
-                  <TableCell>
-                    {own && (
+                      <TableCell>
+                        <ReactMarkdown source={blog.url} />
+                      </TableCell>
+                    </div>
+                    <TableCell> {blog.likes} likes </TableCell>
+                    <TableCell>
                       <Button
-                        variant="contained"
                         color="primary"
-                        onClick={() => handleRemove(blog.id)}
+                        variant="contained"
+                        onClick={() => dispatch(likeIt(blog.id))}
                       >
-                        remove
+                        like
                       </Button>
-                    )}
-                  </TableCell>
-                </>
-              )}
-            </TableRow>
+                    </TableCell>
+                    <TableCell> added by {blog.user.name} </TableCell>
+                    <TableCell>
+                      {own && (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={() => dispatch(removeIt(blog.id))}
+                        >
+                          remove
+                        </Button>
+                      )}
+                    </TableCell>
+                  </>
+                )}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
     </div>
   );
-};
-
-Blog.propTypes = {
-  blog: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-  }).isRequired,
-  handleLike: PropTypes.func.isRequired,
-  handleRemove: PropTypes.func.isRequired,
-  own: PropTypes.bool.isRequired,
 };
 
 export default Blog;

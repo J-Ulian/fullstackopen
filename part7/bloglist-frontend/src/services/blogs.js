@@ -5,7 +5,9 @@ const baseUrl = '/api/blogs';
 
 const getConfig = () => {
   return {
-    headers: { Authorization: `bearer ${storage.loadUser().token}` },
+    headers: {
+      Authorization: `bearer ${storage.loadUser().token}`
+    },
   };
 };
 
@@ -29,4 +31,9 @@ const remove = (id) => {
   return request.then((response) => response.data);
 };
 
-export default { getAll, create, update, remove };
+export default {
+  getAll,
+  create,
+  update,
+  remove
+};

@@ -8,6 +8,10 @@ import styled from 'styled-components';
 import blogService from './services/blogs';
 import loginService from './services/login';
 import storage from './utils/storage';
+import { createStore } from 'redux';
+import { createBlog, likeIt } from './reducers/blogReducer';
+import { initializeBlogs } from './reducers/blogReducer';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
   Switch,
@@ -35,7 +39,8 @@ import {
 import { Alert } from '@material-ui/lab';
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const dispatch = useDispatch();
+
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -49,8 +54,12 @@ const App = () => {
   };
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+    dispatch(initializeBlogs());
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   blogService.getAll().then((blogs) => setBlogs(blogs));
+  // }, []);
 
   useEffect(() => {
     const user = storage.loadUser();
@@ -93,38 +102,43 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blog);
       blogFormRef.current.toggleVisibility();
-      setBlogs(blogs.concat(newBlog));
+
       notifyWith(`a new blog '${newBlog.title}' by ${newBlog.author} added!`);
     } catch (exception) {
       console.log(exception);
     }
   };
 
-  const handleLike = async (id) => {
-    const blogToLike = blogs.find((b) => b.id === id);
-    const likedBlog = {
-      ...blogToLike,
-      likes: blogToLike.likes + 1,
-      user: blogToLike.user.id,
-    };
-    await blogService.update(likedBlog);
-    setBlogs(
-      blogs.map((b) =>
-        b.id === id ? { ...blogToLike, likes: blogToLike.likes + 1 } : b
-      )
-    );
-  };
+  // const handleLike = async (id) => {
+  //  // const blogToLike = blogs.find((b) => b.id === id);
+  //   const likedBlog = {
+  //     ...blogToLike,
+  //     likes: blogToLike.likes + 1,
+  //     user: blogToLike.user.id,
+  //   };
+  //   await blogService.update(likedBlog);
+  //   setBlogs(
+  //     blogs.map((b) =>
+  //       b.id === id
+  //         ? {
+  //             ...blogToLike,
+  //             likes: blogToLike.likes + 1,
+  //           }
+  //         : b
+  //     )
+  //   );
+  // };
 
-  const handleRemove = async (id) => {
-    const blogToRemove = blogs.find((b) => b.id === id);
-    const ok = window.confirm(
-      `Remove blog ${blogToRemove.title} by ${blogToRemove.author}`
-    );
-    if (ok) {
-      await blogService.remove(id);
-      setBlogs(blogs.filter((b) => b.id !== id));
-    }
-  };
+  // const handleRemove = async (id) => {
+  //   const blogToRemove = blogs.find((b) => b.id === id);
+  //   const ok = window.confirm(
+  //     `Remove blog ${blogToRemove.title} by ${blogToRemove.author}`
+  //   );
+  //   if (ok) {
+  //     await blogService.remove(id);
+  //     setBlogs(blogs.filter((b) => b.id !== id));
+  //   }
+  // };
 
   const handleLogout = () => {
     setUser(null);
@@ -134,10 +148,8 @@ const App = () => {
   if (!user) {
     return (
       <Container>
-        <h2>login to application</h2>
-
-        <Notification notification={notification} />
-
+        <h2> login to application </h2>{' '}
+        <Notification notification={notification} />{' '}
         <form onSubmit={handleLogin}>
           <div>
             <TextField
@@ -145,8 +157,8 @@ const App = () => {
               id="username"
               value={username}
               onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
+            />{' '}
+          </div>{' '}
           <div>
             <TextField
               label="password"
@@ -154,19 +166,19 @@ const App = () => {
               id="password"
               value={password}
               onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
+            />{' '}
+          </div>{' '}
           <Button variant="contained" color="primary" type="submit" id="login">
-            login
-          </Button>
-        </form>
+            login{' '}
+          </Button>{' '}
+        </form>{' '}
       </Container>
     );
   }
 
   const Page = styled.div`
     padding: 1em;
-    background: papayawhip;
+    background: white;
   `;
 
   const Footer = styled.div`
@@ -174,57 +186,40 @@ const App = () => {
     margin-top: 1em;
   `;
 
-  const byLikes = (b1, b2) => b2.likes - b1.likes;
-
-  const link = () => {};
-
   return (
     <>
       <Container>
         <Page>
           <AppBar position="static">
             <Toolbar>
-              <Button color="inherit">home</Button>
-              <Button color="inherit">blogs</Button>
-              <Button color="inherit">users</Button>
-
-              <Button color="inherit">login</Button>
-            </Toolbar>
-          </AppBar>
+              <Button color="inherit"> home </Button>{' '}
+              <Button color="inherit"> blogs </Button>{' '}
+              <Button color="inherit"> users </Button>{' '}
+              <Button color="inherit"> login </Button>{' '}
+            </Toolbar>{' '}
+          </AppBar>{' '}
           <div>
-            <h2>blogs</h2>
-
-            <Notification notification={notification} />
-
-            {message && <Alert severity="success">{message}</Alert>}
-
+            <h2> blogs </h2> <Notification notification={notification} />{' '}
+            {message && <Alert severity="success"> {message} </Alert>}{' '}
             <p>
-              {user.name} logged in{' '}
-              <button onClick={handleLogout}>logout</button>
-            </p>
-
+              {' '}
+              {user.name}
+              logged in <button onClick={handleLogout}> logout </button>{' '}
+            </p>{' '}
             <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-              <NewBlog createBlog={createBlog} />
-            </Togglable>
-            <br />
-
-            {blogs.sort(byLikes).map((blog) => (
-              <BlogMUI
-                key={blog.id}
-                blog={blog}
-                handleLike={handleLike}
-                handleRemove={handleRemove}
-                own={user.username === blog.user.username}
-              />
-            ))}
-          </div>
+              <NewBlog createBlog={createBlog} />{' '}
+            </Togglable>{' '}
+            <br /> <BlogMUI />{' '}
+          </div>{' '}
           <Footer>
-            <em>Note app, Department of Computer Science 2020</em>
-          </Footer>
-        </Page>
-      </Container>
+            <em> Note app, Department of Computer Science 2020 </em>{' '}
+          </Footer>{' '}
+        </Page>{' '}
+      </Container>{' '}
     </>
   );
 };
 
 export default App;
+
+//own={user.username === blog.user.username}
