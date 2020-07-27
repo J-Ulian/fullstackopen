@@ -35,7 +35,7 @@ const Blog = ({ handleLike, handleRemove }) => {
     console.log(blogs);
     return blogs;
   });
-  console.log(blogs);
+
   const byLikes = (b1, b2) => b2.likes - b1.likes;
   const own = true;
 
@@ -44,21 +44,22 @@ const Blog = ({ handleLike, handleRemove }) => {
       <TableContainer component={Paper}>
         <Table>
           <TableBody>
+            {' '}
             {blogs.sort(byLikes).map((blog) => (
               <TableRow key={blog.id}>
                 <TableCell>
-                  <i> {blog.title} </i>
-                </TableCell>
-                <TableCell> by {blog.author} </TableCell>
+                  <i> {blog.title} </i>{' '}
+                </TableCell>{' '}
+                <TableCell> by {blog.author} </TableCell>{' '}
                 <TableCell>
                   <Button
                     variant="contained"
                     key={blog.id}
                     onClick={() => setVisible(!visible)}
                   >
-                    {label}
-                  </Button>
-                </TableCell>
+                    {label}{' '}
+                  </Button>{' '}
+                </TableCell>{' '}
                 {visible && (
                   <>
                     <div
@@ -67,38 +68,43 @@ const Blog = ({ handleLike, handleRemove }) => {
                       }}
                     >
                       <TableCell>
-                        <ReactMarkdown source={blog.url} />
-                      </TableCell>
-                    </div>
-                    <TableCell> {blog.likes} likes </TableCell>
+                        <ReactMarkdown source={blog.url} />{' '}
+                      </TableCell>{' '}
+                    </div>{' '}
+                    <TableCell>
+                      {' '}
+                      {blog.likes}
+                      likes{' '}
+                    </TableCell>{' '}
                     <TableCell>
                       <Button
                         color="primary"
                         variant="contained"
                         onClick={() => dispatch(likeIt(blog.id))}
                       >
-                        like
-                      </Button>
-                    </TableCell>
-                    <TableCell> added by {blog.user.name} </TableCell>
+                        like{' '}
+                      </Button>{' '}
+                    </TableCell>{' '}
+                    <TableCell> added by {blog.user.name} </TableCell>{' '}
                     <TableCell>
+                      {' '}
                       {own && (
                         <Button
                           variant="contained"
                           color="primary"
                           onClick={() => dispatch(removeIt(blog.id))}
                         >
-                          remove
+                          remove{' '}
                         </Button>
-                      )}
-                    </TableCell>
+                      )}{' '}
+                    </TableCell>{' '}
                   </>
-                )}
+                )}{' '}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            ))}{' '}
+          </TableBody>{' '}
+        </Table>{' '}
+      </TableContainer>{' '}
     </div>
   );
 };

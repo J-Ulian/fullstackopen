@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Blog from './components/Blog';
+import Users from './components/Users';
 import BlogMUI from './components/BlogMUI';
+import Blog from './components/Blog';
 import Notification from './components/Notification';
 import Togglable from './components/Togglable';
 import NewBlog from './components/NewBlog';
@@ -11,6 +12,7 @@ import storage from './utils/storage';
 import { createStore } from 'redux';
 import { createBlog, likeIt } from './reducers/blogReducer';
 import { initializeBlogs } from './reducers/blogReducer';
+import { initializeUsers } from './reducers/userReducer';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -55,6 +57,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs());
+    dispatch(initializeUsers());
   }, [dispatch]);
 
   // useEffect(() => {
@@ -109,37 +112,6 @@ const App = () => {
     }
   };
 
-  // const handleLike = async (id) => {
-  //  // const blogToLike = blogs.find((b) => b.id === id);
-  //   const likedBlog = {
-  //     ...blogToLike,
-  //     likes: blogToLike.likes + 1,
-  //     user: blogToLike.user.id,
-  //   };
-  //   await blogService.update(likedBlog);
-  //   setBlogs(
-  //     blogs.map((b) =>
-  //       b.id === id
-  //         ? {
-  //             ...blogToLike,
-  //             likes: blogToLike.likes + 1,
-  //           }
-  //         : b
-  //     )
-  //   );
-  // };
-
-  // const handleRemove = async (id) => {
-  //   const blogToRemove = blogs.find((b) => b.id === id);
-  //   const ok = window.confirm(
-  //     `Remove blog ${blogToRemove.title} by ${blogToRemove.author}`
-  //   );
-  //   if (ok) {
-  //     await blogService.remove(id);
-  //     setBlogs(blogs.filter((b) => b.id !== id));
-  //   }
-  // };
-
   const handleLogout = () => {
     setUser(null);
     storage.logoutUser();
@@ -187,14 +159,23 @@ const App = () => {
   `;
 
   return (
-    <>
+    <Router>
       <Container>
         <Page>
           <AppBar position="static">
             <Toolbar>
-              <Button color="inherit"> home </Button>{' '}
-              <Button color="inherit"> blogs </Button>{' '}
-              <Button color="inherit"> users </Button>{' '}
+              <Button color="inherit" component={Link} to="/blogs">
+                {' '}
+                blogs{' '}
+              </Button>{' '}
+              <Button color="inherit" component={Link} to="/users">
+                {' '}
+                users{' '}
+              </Button>{' '}
+              <Button color="inherit" component={Link} to="/">
+                {' '}
+                home{' '}
+              </Button>{' '}
               <Button color="inherit"> login </Button>{' '}
             </Toolbar>{' '}
           </AppBar>{' '}
@@ -209,14 +190,29 @@ const App = () => {
             <Togglable buttonLabel="create new blog" ref={blogFormRef}>
               <NewBlog createBlog={createBlog} />{' '}
             </Togglable>{' '}
-            <br /> <BlogMUI />{' '}
+            <div>
+              <Switch>
+                <Route path="/blogs/:id">
+                  <Blog />
+                </Route>
+                <Route path="/blogs">
+                  <br /> <BlogMUI />{' '}
+                </Route>
+                <Route path="/users">
+                  <br /> <Users />{' '}
+                </Route>
+                <Route path="/">
+                  <h2>Home Page</h2>
+                </Route>
+              </Switch>
+            </div>
           </div>{' '}
           <Footer>
             <em> Note app, Department of Computer Science 2020 </em>{' '}
           </Footer>{' '}
         </Page>{' '}
       </Container>{' '}
-    </>
+    </Router>
   );
 };
 
