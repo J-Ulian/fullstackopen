@@ -202,7 +202,8 @@ const App = () => {
                   <br /> <Users />{' '}
                 </Route>
                 <Route path="/">
-                  <h2>Home Page</h2>
+                  <br />
+                  <h2> Just an empty Home Page (navigate to blogs or users)</h2>
                 </Route>
               </Switch>
             </div>

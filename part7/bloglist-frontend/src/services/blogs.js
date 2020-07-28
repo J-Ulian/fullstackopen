@@ -15,6 +15,10 @@ const getAll = () => {
   const request = axios.get(baseUrl);
   return request.then((response) => response.data);
 };
+const getAllComments = (blog) => {
+  const request = axios.get(`${baseUrl}/${blog.id}/comments`);
+  return request.then((response) => response.data);
+};
 
 const create = (blog) => {
   const request = axios.post(baseUrl, blog, getConfig());
@@ -35,5 +39,6 @@ export default {
   getAll,
   create,
   update,
-  remove
+  remove,
+  getAllComments
 };

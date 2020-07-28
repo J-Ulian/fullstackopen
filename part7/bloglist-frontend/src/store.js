@@ -10,10 +10,12 @@ import {
 
 import blogReducer from './reducers/blogReducer';
 import userReducer from './reducers/userReducer'
+import commentReducer from './reducers/commentReducer'
 
 const reducer = combineReducers({
   blogs: blogReducer,
-  users: userReducer
+  users: userReducer,
+  comments: commentReducer
 });
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));
