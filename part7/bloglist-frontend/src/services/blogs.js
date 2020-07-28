@@ -25,6 +25,16 @@ const create = (blog) => {
   return request.then((response) => response.data);
 };
 
+const createComment = (comment) => {
+
+  const rightformat = {
+    content: comment.comment
+  }
+  console.log(rightformat)
+  const request = axios.post(`${baseUrl}/${comment.id}/comments`, rightformat, getConfig());
+  return request.then((response) => response.data);
+};
+
 const update = (blog) => {
   const request = axios.put(`${baseUrl}/${blog.id}`, blog, getConfig());
   return request.then((response) => response.data);
@@ -40,5 +50,6 @@ export default {
   create,
   update,
   remove,
-  getAllComments
+  getAllComments,
+  createComment
 };
